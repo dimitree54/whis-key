@@ -39,7 +39,7 @@ struct MyCustomToolbar: View {
                 }
             Text("Smart mode")
             Spacer()
-            Button(action: {}){
+            Button(action: {controller.keyboardActionHandler.handle(.character(" "))}){
                 Text("space            ")
                     .foregroundColor(.white)
                     .padding()
@@ -82,7 +82,6 @@ struct MyCustomToolbar: View {
         
         let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
         if let recognizedText = sharedDefaults?.string(forKey: "recognizedText") {
-            print(recognizedText)
             controller.textDocumentProxy.insertText(recognizedText)
             UserDefaults.standard.set(false, forKey: "waitingForText")
         }

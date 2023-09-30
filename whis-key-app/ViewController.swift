@@ -8,213 +8,186 @@ protocol VoiceRecorderDelegate: AnyObject {
 }
 
 class VoiceRecorder: NSObject, AVAudioRecorderDelegate {
-    var audioRecorder: AVAudioRecorder?
-    var recordingURL: URL?
-    weak var delegate: VoiceRecorderDelegate?
+    private(set) var audioRecorder: AVAudioRecorder?
+    private(set) var recordingURL: URL?
+    private var delegate: VoiceRecorderDelegate?
     
-    func startRecording() async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global().async {
-                let audioSession = AVAudioSession.sharedInstance()
-                do {
-                    try audioSession.setCategory(.record, mode: .default)
-                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-                    
-                    self.recordingURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
-                    let settings: [String: Any] = [
-                        AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                        AVSampleRateKey: 12000,
-                        AVNumberOfChannelsKey: 1,
-                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-                    ]
-                    
-                    self.audioRecorder = try AVAudioRecorder(url: self.recordingURL!, settings: settings)
-                    self.audioRecorder?.delegate = self
-                    self.audioRecorder?.record()
-                    
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+    private var audioSession: AVAudioSession {
+        return AVAudioSession.sharedInstance()
+    }
+    
+    func startRecording(delegate: VoiceRecorderDelegate) throws {
+        self.delegate = delegate
+        try self.configureAudioSession()
+        try self.setupAudioRecorder()
+        self.audioRecorder?.record()
+    }
+    
+    private func configureAudioSession() throws {
+        try audioSession.setCategory(.record, mode: .default)
+        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+    }
+    
+    private func setupAudioRecorder() throws {
+        self.recordingURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
+        let settings: [String: Any] = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        self.audioRecorder = try AVAudioRecorder(url: self.recordingURL!, settings: settings)
+        self.audioRecorder?.delegate = self
     }
     
     func stopRecording() {
         audioRecorder?.stop()
+        try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
     }
-
+    
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         delegate?.didFinishRecording(successfully: flag, url: recordingURL)
     }
 }
 
-class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
-    @Binding var smartMode: Bool
-    @Binding var fromKeyboard: Bool
-    @Published var hasSeenInstructions = false  // UserDefaults.standard.bool(forKey: "HasSeenInstructions")
-    @Published var isRecording = false
-    @Published var isLoading = false
-    @Published var isCanceled = false
-    @Published var isDone = false
-    @Published var transcript = ""
-    
+
+class VoiceRecorderWrapper: ObservableObject, VoiceRecorderDelegate {
     private var recorder = VoiceRecorder()
+    private var delegate: VoiceRecorderDelegate?
     
+    @Published var isRecording = false
     @Published var hasPermission = false
-    @Published var permissionDenied = false
 
-    init(smartMode: Binding<Bool>, fromKeyboard: Binding<Bool>) {
-        self._smartMode = smartMode
-        self._fromKeyboard = fromKeyboard
-        recorder.delegate = self
-        checkPermission()
-    }
-
-    func checkPermission() {
-        let status = AVAudioSession.sharedInstance().recordPermission
-        switch status {
-        case .granted:
-            hasPermission = true
-        case .denied:
-            permissionDenied = true
-        case .undetermined:
-            requestPermission()
-        @unknown default:
-            break
+    func requestPermission() async {
+        // Request permission to record.
+        if await AVAudioApplication.requestRecordPermission() {
+            self.hasPermission = true
+        } else {
+            self.hasPermission = false
         }
     }
-
-    func requestPermission() {
-        AVAudioSession.sharedInstance().requestRecordPermission { [weak self] allowed in
-            DispatchQueue.main.async {
-                if allowed {
-                    self?.hasPermission = true
-                } else {
-                    self?.permissionDenied = true
-                }
-            }
-        }
-    }
-
-    func setupRecording() {
+    func startRecording(delegate: VoiceRecorderDelegate) async throws {
         isRecording = false
-        isLoading = true
-        isCanceled = false
-        isDone = false
         if !hasPermission {
-            checkPermission()
-            return
+            await requestPermission()
         }
-
-        Task {
-            do {
-                try await recorder.startRecording()
-                isRecording = true
-                isLoading = false
-                isCanceled = false
-                isDone = false
-            } catch {
-                print("Error starting the recording: \(error)")
-            }
-        }
+        self.delegate = delegate
+        try recorder.startRecording(delegate: self)
+        isRecording = true
     }
-    
     func stopRecording() {
         recorder.stopRecording()
         isRecording = false
-        isLoading = true
-        isCanceled = false
-        isDone = false
+    }
+    func didFinishRecording(successfully flag: Bool, url: URL?) {
+        self.isRecording = false
+        self.delegate?.didFinishRecording(successfully: flag, url: url)
     }
     
-    func cancelRecording() {
-        recorder.stopRecording()
-        isRecording = false
-        isLoading = false
-        isCanceled = true
-        isDone = true
-    }
+}
+
+
+class AudioRecognitionService {
+    let endpointUrl = "https://rashchenko.xyz:443/recognise"
     
-    func recognise(url: URL) async {
-        // Check the audio file's length
-        var audioDuration: TimeInterval = 0.0
-        do {
-            let audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioDuration = audioPlayer.duration
-        } catch {
-            print("Error getting audio file duration: \(error)")
-        }
-        print("Audio file duration: \(audioDuration) seconds")
-        
-        
-        uploadAudioFile(audioFilename: url, smartMode: smartMode, completion: onRecognition)
-    }
-    
-    func onRecognition(transcript: String?, error: Error?){
-        isRecording = false
-        isLoading = false
-        isCanceled = false
-        isDone = true
-        print("writing")
-        let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
-        // Save to shared defaults and move to the background
-        sharedDefaults?.set(transcript, forKey: "recognizedText")
-        sharedDefaults?.synchronize()  // force saving changes
-        print(sharedDefaults?.string(forKey: "recognizedText"))
-        self.transcript = transcript ?? ""
-    }
-    
-    func uploadAudioFile(audioFilename: URL, smartMode: Bool, completion: @escaping (String?, Error?) -> Void) {
-        print("uploading with smartMode=\(smartMode)")
-        let url = "https://rashchenko.xyz:443/recognise"
+    func recognise(audioFilename: URL, smartMode: Bool, completion: @escaping (String?, Error?) -> Void) {
         let headers: HTTPHeaders = ["Content-type": "multipart/form-data"]
         
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(audioFilename, withName: "m4a_file")
             multipartFormData.append(Data("\(smartMode)".utf8), withName: "smart_mode")
-        }, to: url, headers: headers).responseJSON { response in
+        }, to: endpointUrl, headers: headers)
+        .responseDecodable(of: AudioRecognitionResponse.self) { response in
             switch response.result {
-            case .success(let value):
-                if let json = value as? [String: Any], let transcript = json["transcript"] as? String {
-                    completion(transcript, nil)
-                } else {
-                    completion(nil, NSError(domain: "", code: 400, userInfo: ["message": "Invalid response from server"]))
-                }
+            case .success(let recognitionResponse):
+                completion(recognitionResponse.transcript, nil)
             case .failure(let error):
                 completion(nil, error)
             }
         }
     }
+}
 
-    func didFinishRecording(successfully flag: Bool, url: URL?) {
+struct AudioRecognitionResponse: Decodable {
+    let transcript: String?
+}
+
+class ClipboardManager {
+    func copyToClipboard(text: String) {
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = text
+    }
+}
+
+
+class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
+    @Binding var smartMode: Bool
+    @Binding var fromKeyboard: Bool
+    
+    @Published var hasSeenInstructions = UserDefaults.standard.bool(forKey: "HasSeenInstructions")
+    @Published var isLoading = false
+    @Published var isCanceled = false
+    @Published var isDone = false
+    @Published var transcript = ""
+    
+    var voiceRecorderWrapper = VoiceRecorderWrapper()
+    private var audioRecognitionService = AudioRecognitionService()
+    private var clipboardManager = ClipboardManager()
+    
+    init(smartMode: Binding<Bool>, fromKeyboard: Binding<Bool>) {
+        self._smartMode = smartMode
+        self._fromKeyboard = fromKeyboard
+    }
+    
+    func setupRecording() {
+        isCanceled = false
+        isDone = false
+        isLoading = true
+        Task{
+            do{
+                try await voiceRecorderWrapper.startRecording(delegate: self)
+            }
+            catch{
+                transcript = error.localizedDescription
+                isDone = true
+            }
+            isLoading = false
+        }
+    }
+    func cancelRecording() {
+        voiceRecorderWrapper.stopRecording()
+        isLoading = false
+        isCanceled = true
+        isDone = true
+    }
+    func onRecognition(transcript: String?, error: Error?) {
+        isLoading = false
+        isDone = true
+        let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
+        sharedDefaults?.set(transcript, forKey: "recognizedText")
+        sharedDefaults?.synchronize()
+        self.transcript = transcript ?? ""
+    }
+    func didFinishRecording(successfully flag: Bool, url: URL?) { 
         if (isCanceled){
-            print("Canceled")
+            transcript = "Recognition cancelled"
             return
         }
         guard flag, let recordingURL = url else {
-            print("Recording was unsuccessful or the URL is nil.")
+            transcript = "Recording was unsuccessful or the URL is nil."
             return
         }
-        
-        Task {
-            await recognise(url: recordingURL)
-        }
-    }
-    
-    func close(){
-        isRecording = false
         isLoading = true
-        isCanceled = false
-        isDone = false
+        self.audioRecognitionService.recognise(audioFilename: recordingURL, smartMode: smartMode, completion: onRecognition)
+    }
+    func close(){
+        cancelRecording()
         Task{
             await UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         }
     }
-    
-    func copy2clipboard(){
-        let pasteboard = UIPasteboard.general
-        pasteboard.string = transcript
+    func copy2clipboard() {
+        clipboardManager.copyToClipboard(text: transcript)
     }
 }
 
@@ -223,9 +196,6 @@ struct IntroView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("Welcome to Whis-Key!")
-                .font(.largeTitle)
-                .padding()
             
             Text("Follow these steps to enable Whis-Key keyboard:")
                 .font(.headline)
@@ -247,128 +217,165 @@ struct IntroView: View {
     }
 }
 
+struct IconButton: View {
+    var action: () -> Void
+    var bgColor: Color
+    var systemName: String
+    var size: CGFloat
+    
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                Circle()
+                    .fill(bgColor)
+                    .frame(width: size, height: size)
+                
+                Image(systemName: systemName)
+                    .foregroundColor(.white)
+                    .font(.system(size: size / 2))
+            }
+        }
+        .padding()
+    }
+}
+
 struct VoiceRecognitionView: View {
+    @Binding var smartMode: Bool
+    @Binding var fromKeyboard: Bool
     @StateObject public var viewModel: RecorderViewModel
     @State private var animationScale: CGFloat = 1.0
     @Environment(\.scenePhase) private var scenePhase
     
     init(smartMode: Binding<Bool>, fromKeyboard: Binding<Bool>) {
+        self._smartMode = smartMode
+        self._fromKeyboard = fromKeyboard
         self._viewModel = StateObject(wrappedValue: RecorderViewModel(smartMode: smartMode, fromKeyboard: fromKeyboard))
     }
     
     var body: some View {
-        if (viewModel.hasSeenInstructions){
-            VStack {
-                if (!viewModel.hasPermission || viewModel.permissionDenied){
-                    Text("Waiting for record permissions. Enable them in settings")
-                }
-                else{
-                    if viewModel.isRecording {
-                        Button(action: viewModel.stopRecording) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.red)
-                                    .frame(width: 100, height: 100)
-                                    .scaleEffect(animationScale)
-                                
-                                Image(systemName: "stop.fill") // SF Symbol for "stop"
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 50))
-                            }
-                        }
-                        .padding()
-                        Toggle("", isOn: $viewModel.smartMode)
-                            .labelsHidden()
-                        Text("Smart mode")
-                    }
-                    
-                    if viewModel.isLoading {
-                        ProgressView() // Loading animation
-                    }
-                    if viewModel.isDone{
-                        VStack{
-                            HStack{
-                                if (viewModel.fromKeyboard){
-                                    VStack{
-                                        Text("👆 press here to")
-                                        Text("return to keyboard")
-                                    }
-                                }
-                                Spacer()
-                                Button(action: viewModel.close) {
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color.gray)
-                                            .frame(width: 50, height: 50)
-                                        Image(systemName: "xmark") // SF Symbol for "close"
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 25))
-                                    }
-                                }.padding()
-                            }
-                            
-                            Spacer()
-                            
-                            Button(action: viewModel.setupRecording) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: 100, height: 100)
-                                    
-                                    Image(systemName: "repeat") // SF Symbol for "repeat"
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 50))
-                                }
-                            }.padding()
-                            Text("Recognised text:")
-                                .padding()
-                                .font(.largeTitle) // This will make the text larger
-                                .bold()            // This will make the text bold
-                            Text(viewModel.transcript)
-                            Button(action: viewModel.copy2clipboard) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.gray)
-                                        .frame(width: 100, height: 100)
-                                    Image(systemName: "doc.on.doc") // SF Symbol for "copy"
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 50))
-                                }
-                            }.padding()
-                            Spacer()
-                        }
-                    }
-                }
-                
+        if (viewModel.hasSeenInstructions) {
+            mainView
+        }
+        else {
+            IntroView(onDone: setupInstructionsAndRecording)
+        }
+    }
+    
+    private var mainView: some View {
+        VStack {
+            if !viewModel.voiceRecorderWrapper.hasPermission {
+                permissionView
             }
-            .onChange(of: viewModel.isRecording) { isRecording in
-                withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
-                    animationScale = isRecording ? 1.2 : 1.0
-                }
+            else if viewModel.voiceRecorderWrapper.isRecording {
+                recordingView
             }
-            .onChange(of: scenePhase) { newPhase in
-                switch newPhase {
-                case .active:
-                    print("set up")
-                    if (viewModel.hasSeenInstructions){
-                        viewModel.setupRecording()
-                    }
-                case .inactive:
-                    print("App is inactive")
-                    viewModel.cancelRecording()
-                case .background:
-                    print("App is in the background")
-                @unknown default:
-                    print("Unknown scene phase")
-                }
+            else if viewModel.isDone {
+                doneView
+            }
+            else{
+                loadingView
             }
         }
-        else{
-            IntroView(onDone: {
-                viewModel.hasSeenInstructions = true
-                UserDefaults.standard.set(true, forKey: "HasSeenInstructions")
+        .onChange(of: viewModel.voiceRecorderWrapper.isRecording){
+            handleRecordingChange(isRecording: viewModel.voiceRecorderWrapper.isRecording)
+        }
+        .onChange(of: scenePhase){
+            handleScenePhaseChange(newPhase: scenePhase)
+        }
+    }
+    
+    private var permissionView: some View {
+        Text("Waiting for record permissions. Enable them in settings")
+    }
+    
+    private var recordingView: some View {
+        VStack {
+            Text("Recording...")
+            Button(action: viewModel.voiceRecorderWrapper.stopRecording) {
+                ZStack {
+                    Circle()
+                        .fill(.red)
+                        .frame(width: 100, height: 100)
+                        .scaleEffect(animationScale)
+                    Image(systemName: "stop.fill")
+                        .foregroundColor(.white)
+                        .font(.system(size: 100 / 2))
+                }
+            }
+            .padding()
+            Toggle("", isOn: $smartMode)
+                .labelsHidden()
+            Text("Smart mode")
+        }
+    }
+    
+    private var loadingView: some View {
+        ProgressView() // Loading animation
+    }
+    
+    private var doneView: some View {
+        VStack{
+            topBar
+            Spacer()
+            repeatButton
+            Text("Recognised text:")
+            Text(viewModel.transcript)
+            copyButton
+            Spacer()
+        }
+    }
+    
+    private var topBar: some View {
+        HStack{
+            if (fromKeyboard){
+                VStack{
+                    Text("👆 press here to")
+                    Text("return to keyboard")
+                }
+            }
+            Spacer()
+            IconButton(action: viewModel.close, bgColor: .gray, systemName: "xmark", size: 50)
+        }
+        .padding()
+    }
+    
+    private var repeatButton: some View {
+        IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 100)
+    }
+    
+    private var copyButton: some View {
+        VStack{
+            IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 100)
+                .padding()
+            Text("Copy to buffer")
+        }
+        
+    }
+    
+    private func handleRecordingChange(isRecording: Bool) {
+        withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+            animationScale = isRecording ? 1.2 : 1.0
+        }
+    }
+    
+    private func handleScenePhaseChange(newPhase: ScenePhase) {
+        switch newPhase {
+        case .active:
+            if (viewModel.hasSeenInstructions) {
                 viewModel.setupRecording()
-            })
+            }
+        case .inactive:
+            viewModel.cancelRecording()
+        case .background:
+            break
+        @unknown default:
+            break
         }
+    }
+    
+    private func setupInstructionsAndRecording() {
+        viewModel.hasSeenInstructions = true
+        UserDefaults.standard.set(true, forKey: "HasSeenInstructions")
+        viewModel.setupRecording()
     }
 }
