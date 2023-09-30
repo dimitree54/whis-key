@@ -3,87 +3,74 @@ import SwiftUI
 
 struct MyCustomToolbar: View {
     unowned var controller: KeyboardInputViewController
-    @State private var isSmartModeOn: Bool = false
-
+    @State private var isSmartModeOn: Bool = UserDefaults.standard.bool(forKey: "smartMode")
+    
     var body: some View {
         HStack {
             Spacer()
-            
-            Button(action: startDictation) {
-                Image(systemName: "mic.fill")
+            microphoneButton
+            Spacer()
+            toggleAndViewButtons
+            Spacer()
+            actionButtons
+        }
+        .onAppear(perform: fetchRecognizedText)
+    }
+    
+    var microphoneButton: some View {
+        Button(action: startDictation) {
+            Image(systemName: "mic.fill")
+                .foregroundColor(.white)
+                .font(.system(size: 60))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.blue)
+        .clipShape(Circle())
+        .padding()
+    }
+    
+    var toggleAndViewButtons: some View {
+        VStack{
+            Spacer()
+            Toggle("", isOn: $isSmartModeOn)
+                .labelsHidden()
+                .onChange(of: isSmartModeOn) {
+                    UserDefaults.standard.set(isSmartModeOn, forKey: "smartMode")
+                }
+            Text("Smart mode")
+            Spacer()
+            Button(action: {}){
+                Text("space            ")
                     .foregroundColor(.white)
-                    .font(.system(size: 60))
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity) // Take all available space
-            .background(Color.blue)
-            .clipShape(Circle())
-            .padding()
-            
-            Spacer()
-            
-            VStack{
-                Spacer()
-                Toggle("", isOn: $isSmartModeOn)
-                    .labelsHidden()
-                    .onChange(of: isSmartModeOn) {
-                        saveSmartMode()
-                    }
-                Text("Smart mode")
-                Spacer()
-                Button(action: {}){
-                    Text("space            ")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                }
-                .padding()
-            }
-            
-            Spacer()
-            
-            VStack{
-                Button(action: {controller.keyboardActionHandler.handle(.backspace)}){
-                    Image(systemName: "delete.left.fill") // Use a system symbol for the microphone
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                }
-                Button(action: {controller.keyboardActionHandler.handle(.character("\n"))}){
-                    Image(systemName: "return") // Use a system symbol for the microphone
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                }
-                Button(action: {controller.keyboardActionHandler.handle(.dismissKeyboard)}){
-                    Image(systemName: "keyboard.chevron.compact.down") // Use a system symbol for the microphone
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                }
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
             }
             .padding()
         }
-        .onAppear(perform: fetchRecognizedText)
-        .onAppear(perform: loadSmartMode)
     }
     
-    func createCustomButton() -> UIButton {
-        let button = UIButton(type: .system)
-        button.setTitle("Custom", for: .normal)
-        button.backgroundColor = .systemGray
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.layer.cornerRadius = 5
-        return button
+    var actionButtons: some View {
+        VStack{
+            buttonWithIcon(action: {controller.keyboardActionHandler.handle(.backspace)}, systemName: "delete.left.fill")
+            buttonWithIcon(action: {controller.keyboardActionHandler.handle(.character("\n"))}, systemName: "return")
+            buttonWithIcon(action: {controller.keyboardActionHandler.handle(.dismissKeyboard)}, systemName: "keyboard.chevron.compact.down")
+        }
+        .padding()
     }
     
-    func startDictation(){
-        UserDefaults.standard.set("true", forKey: "waitingForText")
-        // Action for microphone button
+    func buttonWithIcon(action: @escaping () -> Void, systemName: String) -> some View {
+        Button(action: action){
+            Image(systemName: systemName)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.gray)
+                .cornerRadius(10)
+        }
+    }
+    
+    func startDictation() {
+        UserDefaults.standard.set(true, forKey: "waitingForText")
         let smartModeText = isSmartModeOn ? "true" : "false"
         if let url = URL(string: "whiskeyschema://dictation?smartMode=\(smartModeText)") {
             controller.openUrl(url)
@@ -91,28 +78,16 @@ struct MyCustomToolbar: View {
     }
     
     func fetchRecognizedText() {
-        let waitingForText = UserDefaults.standard.string(forKey: "waitingForText")
-        if (waitingForText == "true"){
-            let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
-            let recognizedText = sharedDefaults?.string(forKey: "recognizedText")
+        guard UserDefaults.standard.bool(forKey: "waitingForText") else { return }
+        
+        let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
+        if let recognizedText = sharedDefaults?.string(forKey: "recognizedText") {
             print(recognizedText)
-            if let recognizedText = recognizedText {
-                controller.textDocumentProxy.insertText(recognizedText)
-                UserDefaults.standard.set("false", forKey: "waitingForText")
-            }
+            controller.textDocumentProxy.insertText(recognizedText)
+            UserDefaults.standard.set(false, forKey: "waitingForText")
         }
     }
-    
-    func saveSmartMode(){
-        UserDefaults.standard.set(isSmartModeOn ? "true" : "false", forKey: "smartMode")
-    }
-    
-    func loadSmartMode(){
-        let smartModeText = UserDefaults.standard.string(forKey: "smartMode")
-        isSmartModeOn = smartModeText == "true"
-    }
 }
-
 
 class KeyboardViewController: KeyboardInputViewController {
     override func viewWillSetupKeyboard() {
