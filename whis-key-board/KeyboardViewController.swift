@@ -56,6 +56,7 @@ struct MyCustomToolbar: View {
                     .background(Color.gray)
                     .cornerRadius(10)
             }
+            .buttonRepeatBehavior(.enabled)
             .padding()
         }
     }
@@ -63,7 +64,7 @@ struct MyCustomToolbar: View {
     var inputSourceButton: some View {
         VStack{
             Spacer()
-            buttonWithIcon(action: {controller.advanceToNextInputMode()}, systemName: "globe")
+            buttonWithIcon(action: {}, systemName: "globe")
         }
         .padding()
     }
@@ -71,6 +72,7 @@ struct MyCustomToolbar: View {
     var actionButtons: some View {
         VStack{
             buttonWithIcon(action: {controller.keyboardActionHandler.handle(.backspace)}, systemName: "delete.left.fill")
+                .buttonRepeatBehavior(.enabled)
             buttonWithIcon(action: {controller.keyboardActionHandler.handle(.character("\n"))}, systemName: "return")
             buttonWithIcon(action: {controller.keyboardActionHandler.handle(.dismissKeyboard)}, systemName: "keyboard.chevron.compact.down")
         }
