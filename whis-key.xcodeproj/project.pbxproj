@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E757D822ABF6C3E0035A03B /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E757D812ABF6C3E0035A03B /* App.swift */; };
 		4E757D852ABF7CBD0035A03B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4E757D842ABF7CBD0035A03B /* Alamofire */; };
+		4E76380A2AC9C933003B0ED0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E7638092AC9C933003B0ED0 /* Assets.xcassets */; };
 		4E89BEE42ABEF08A008C0119 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E89BEE32ABEF08A008C0119 /* KeyboardKit */; };
 		AF8FF98B1E35B10300392FA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF98A1E35B10300392FA2 /* ViewController.swift */; };
 		AF8FF9A11E35B13B00392FA2 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF9A01E35B13B00392FA2 /* KeyboardViewController.swift */; };
@@ -44,6 +45,7 @@
 		4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key.entitlements"; sourceTree = "<group>"; };
 		4E757DA12AC2ADB60035A03B /* whis-key-board.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key-board.entitlements"; sourceTree = "<group>"; };
 		4E7638052AC77723003B0ED0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4E7638092AC9C933003B0ED0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF8FF9851E35B10300392FA2 /* whis-key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whis-key.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF8FF98A1E35B10300392FA2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AF8FF9941E35B10300392FA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		AF8FF97C1E35B10300392FA2 = {
 			isa = PBXGroup;
 			children = (
+				4E7638092AC9C933003B0ED0 /* Assets.xcassets */,
 				4E7638052AC77723003B0ED0 /* README.md */,
 				4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */,
 				AF8FF9871E35B10300392FA2 /* whis-key-app */,
@@ -220,6 +223,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E76380A2AC9C933003B0ED0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +378,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "whis-key.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -391,8 +396,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "we.rashchenko.whis-key";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -401,6 +409,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "whis-key.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -418,8 +427,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "we.rashchenko.whis-key";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

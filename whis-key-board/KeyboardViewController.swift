@@ -4,8 +4,18 @@ import SwiftUI
 struct MyCustomToolbar: View {
     unowned var controller: KeyboardInputViewController
     @State private var isSmartModeOn: Bool = UserDefaults.standard.bool(forKey: "smartMode")
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     var body: some View {
+        HStack{
+            if horizontalSizeClass == .regular {
+                inputSourceButton
+            }
+            toolbar
+        }
+    }
+    
+    var toolbar: some View {
         HStack {
             Spacer()
             microphoneButton
@@ -48,6 +58,14 @@ struct MyCustomToolbar: View {
             }
             .padding()
         }
+    }
+    
+    var inputSourceButton: some View {
+        VStack{
+            Spacer()
+            buttonWithIcon(action: {controller.advanceToNextInputMode()}, systemName: "globe")
+        }
+        .padding()
     }
     
     var actionButtons: some View {
