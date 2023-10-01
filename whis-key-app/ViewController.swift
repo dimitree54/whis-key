@@ -163,10 +163,16 @@ class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
     func onRecognition(transcript: String?, error: Error?) {
         isLoading = false
         isDone = true
+        
+        if let error = error {
+            self.transcript = error.localizedDescription
+        } else {
+            self.transcript = transcript ?? "Unknown recognition error"
+        }
+        
         let sharedDefaults = UserDefaults(suiteName: "group.we.rashchenko")
-        sharedDefaults?.set(transcript, forKey: "recognizedText")
+        sharedDefaults?.set(self.transcript, forKey: "recognizedText")
         sharedDefaults?.synchronize()
-        self.transcript = transcript ?? ""
     }
     func didFinishRecording(successfully flag: Bool, url: URL?) { 
         if (isCanceled){
@@ -174,7 +180,7 @@ class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
             return
         }
         guard flag, let recordingURL = url else {
-            transcript = "Recording was unsuccessful or the URL is nil."
+            transcript = "Recording was unsuccessful or file URL is nil."
             return
         }
         isLoading = true
@@ -199,9 +205,22 @@ struct IntroView: View {
             
             Text("Follow these steps to enable Whis-Key keyboard:")
                 .font(.headline)
-                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             Text("1. Open Settings\n2. Tap General\n3. Tap Keyboard\n4. Tap Keyboards\n5. Tap Add New Keyboard\n6. Select Whis-Key")
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text("By pressing Done, you agree on following recognition pipeline:")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("\n1. App records your voice\n2. Send it to our server\n3. Our server redirects your voice to OpenAI Whisper API\n4. Our server send the recognised text back to you")
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("Right after the recognition we remove your voice from our server. Though we have access to your voice recording on our server during the recognition, we promise not to listen to it.")
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Link("OpenAI Whisper API privacy policy", destination: URL(string: "https://openai.com/policies/privacy-policy")!)
                 .padding()
             
             Button(action: onDone) {
