@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E6EB6E62AD9CB00005E0BA8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E6EB6E52AD9CB00005E0BA8 /* Settings.bundle */; };
 		4E757D822ABF6C3E0035A03B /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E757D812ABF6C3E0035A03B /* App.swift */; };
 		4E757D852ABF7CBD0035A03B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4E757D842ABF7CBD0035A03B /* Alamofire */; };
 		4E89BEE42ABEF08A008C0119 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E89BEE32ABEF08A008C0119 /* KeyboardKit */; };
@@ -40,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4E6EB6E52AD9CB00005E0BA8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4E757D812ABF6C3E0035A03B /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key.entitlements"; sourceTree = "<group>"; };
 		4E757DA12AC2ADB60035A03B /* whis-key-board.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key-board.entitlements"; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				AF8FF98A1E35B10300392FA2 /* ViewController.swift */,
 				AF8FF9941E35B10300392FA2 /* Info.plist */,
 				4E757D812ABF6C3E0035A03B /* App.swift */,
+				4E6EB6E52AD9CB00005E0BA8 /* Settings.bundle */,
 			);
 			path = "whis-key-app";
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E6EB6E62AD9CB00005E0BA8 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

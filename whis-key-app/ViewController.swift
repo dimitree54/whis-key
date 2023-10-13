@@ -203,12 +203,18 @@ struct IntroView: View {
         VStack {
             Spacer()
             
-            Text("Follow these steps to enable Whis-Key keyboard:")
+            Text("How to enable Whis-Key keyboard:")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text("1. Open Settings\n2. Tap General\n3. Tap Keyboard\n4. Tap Keyboards\n5. Tap Add New Keyboard\n6. Select Whis-Key")
-                .padding()
+            
+            Link("1. Open Settings", destination: URL(string: UIApplication.openSettingsURLString)!)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text("2. Tap Keyboards")
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text("3. Enable whis-key-board")
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             Text("By pressing Done, you agree on following recognition pipeline:")
