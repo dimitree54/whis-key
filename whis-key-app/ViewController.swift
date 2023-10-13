@@ -389,7 +389,6 @@ struct VoiceRecognitionView: View {
                 }
             }
             Spacer()
-            IconButton(action: viewModel.close, bgColor: .gray, systemName: "xmark", size: 50)
         }
         .padding()
     }
