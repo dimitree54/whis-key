@@ -13,7 +13,7 @@
 		4E89BEE42ABEF08A008C0119 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E89BEE32ABEF08A008C0119 /* KeyboardKit */; };
 		AF8FF98B1E35B10300392FA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF98A1E35B10300392FA2 /* ViewController.swift */; };
 		AF8FF9A11E35B13B00392FA2 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF9A01E35B13B00392FA2 /* KeyboardViewController.swift */; };
-		AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AF8FF99E1E35B13B00392FA2 /* whis-key-board.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AF8FF99E1E35B13B00392FA2 /* whis-key-board.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,15 +27,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AF8FF9A91E35B13B00392FA2 /* Embed App Extensions */ = {
+		AF8FF9A91E35B13B00392FA2 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed App Extensions */,
+				AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -135,7 +135,7 @@
 				AF8FF9811E35B10300392FA2 /* Sources */,
 				AF8FF9821E35B10300392FA2 /* Frameworks */,
 				AF8FF9831E35B10300392FA2 /* Resources */,
-				AF8FF9A91E35B13B00392FA2 /* Embed App Extensions */,
+				AF8FF9A91E35B13B00392FA2 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -176,8 +176,9 @@
 		AF8FF97D1E35B10300392FA2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = we.rashchenko;
 				TargetAttributes = {
 					AF8FF9841E35B10300392FA2 = {
@@ -198,10 +199,9 @@
 			};
 			buildConfigurationList = AF8FF9801E35B10300392FA2 /* Build configuration list for PBXProject "whis-key" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -271,6 +271,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -291,6 +292,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -301,6 +303,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -328,6 +331,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -348,6 +352,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -358,6 +363,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

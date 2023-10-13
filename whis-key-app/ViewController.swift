@@ -371,12 +371,21 @@ struct VoiceRecognitionView: View {
     private var doneView: some View {
         VStack{
             topBar
+                .padding()
             Spacer()
-            repeatButton
             Text("Recognised text:")
-            Text(viewModel.transcript)
-            copyButton
-            Spacer()
+            ScrollView {
+                Text(viewModel.transcript)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding()
+            }
+            .background(RoundedRectangle(cornerRadius: 10)
+                            .strokeBorder(Color.gray, lineWidth: 1))
+            .padding()
+            HStack{
+                repeatButton
+                copyButton
+            }
         }
     }
     
@@ -394,14 +403,16 @@ struct VoiceRecognitionView: View {
     }
     
     private var repeatButton: some View {
-        IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 100)
+        VStack{
+            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 100)
+            Text("Retry")
+        }
     }
     
     private var copyButton: some View {
         VStack{
             IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 100)
-                .padding()
-            Text("Copy to buffer")
+            Text("Copy")
         }
         
     }
