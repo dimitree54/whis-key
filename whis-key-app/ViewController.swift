@@ -368,11 +368,8 @@ struct VoiceRecognitionView: View {
         ProgressView() // Loading animation
     }
     
-    private var doneView: some View {
+    private var transcriptView: some View{
         VStack{
-            topBar
-                .padding()
-            Spacer()
             Text("Recognised text:")
             ScrollView {
                 Text(viewModel.transcript)
@@ -380,12 +377,24 @@ struct VoiceRecognitionView: View {
                     .padding()
             }
             .background(RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(Color.gray, lineWidth: 1))
-            .padding()
-            HStack{
-                repeatButton
-                copyButton
-            }
+                .strokeBorder(Color.gray, lineWidth: 1))
+        }
+    }
+    
+    private var actionsBar: some View{
+        HStack{
+            repeatButton
+            editButton
+            copyButton
+        }
+    }
+    
+    private var doneView: some View {
+        VStack{
+            topBar.padding()
+            Spacer()
+            transcriptView.padding()
+            actionsBar
         }
     }
     
@@ -406,6 +415,13 @@ struct VoiceRecognitionView: View {
         VStack{
             IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 100)
             Text("Retry")
+        }
+    }
+    
+    private var editButton: some View {
+        VStack{
+            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "pencil", size: 100)
+            Text("Edit")
         }
     }
     
