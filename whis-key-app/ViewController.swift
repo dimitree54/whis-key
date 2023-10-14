@@ -88,7 +88,13 @@ class VoiceRecorderWrapper: ObservableObject, VoiceRecorderDelegate {
 
 
 class AudioRecognitionService {
-    let endpointUrl = "https://rashchenko.xyz:443/recognise"
+    let endpointUrl = "https://rashchenko.xyz:443/"
+    lazy var recogniseUrl: String = {
+        return self.endpointUrl + "recognise"
+    }()
+    lazy var editUrl: String = {
+        return self.endpointUrl + "edit"
+    }()
     
     func recognise(audioFilename: URL, smartMode: Bool, completion: @escaping (String?, Error?) -> Void) {
         let headers: HTTPHeaders = ["Content-type": "multipart/form-data"]
@@ -96,7 +102,24 @@ class AudioRecognitionService {
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(audioFilename, withName: "m4a_file")
             multipartFormData.append(Data("\(smartMode)".utf8), withName: "smart_mode")
-        }, to: endpointUrl, headers: headers)
+        }, to: recogniseUrl, headers: headers)
+        .responseDecodable(of: AudioRecognitionResponse.self) { response in
+            switch response.result {
+            case .success(let recognitionResponse):
+                completion(recognitionResponse.transcript, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func edit(audioFilename: URL, text2edit: String, completion: @escaping (String?, Error?) -> Void) {
+        let headers: HTTPHeaders = ["Content-type": "multipart/form-data"]
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(audioFilename, withName: "m4a_file")
+            multipartFormData.append(Data("\(text2edit)".utf8), withName: "text")
+        }, to: editUrl, headers: headers)
         .responseDecodable(of: AudioRecognitionResponse.self) { response in
             switch response.result {
             case .success(let recognitionResponse):
@@ -193,7 +216,12 @@ class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
             return
         }
         isLoading = true
-        self.audioRecognitionService.recognise(audioFilename: recordingURL, smartMode: smartMode, completion: onRecognition)
+        if (editMode){
+            self.audioRecognitionService.edit(audioFilename: recordingURL, text2edit: transcript, completion: onRecognition)
+        }
+        else{
+            self.audioRecognitionService.recognise(audioFilename: recordingURL, smartMode: smartMode, completion: onRecognition)
+        }
     }
     func close(){
         cancelRecording()
@@ -428,21 +456,21 @@ struct VoiceRecognitionView: View {
     
     private var repeatButton: some View {
         VStack{
-            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 100)
+            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 50)
             Text("Retry")
         }
     }
     
     private var editButton: some View {
         VStack{
-            IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 100)
+            IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 50)
             Text("Edit")
         }
     }
     
     private var copyButton: some View {
         VStack{
-            IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 100)
+            IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 50)
             Text("Copy")
         }
         
