@@ -124,6 +124,7 @@ class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
     @Binding var smartMode: Bool
     @Binding var fromKeyboard: Bool
     
+    @Published var editMode = false
     @Published var hasSeenInstructions = UserDefaults.standard.bool(forKey: "HasSeenInstructions")
     @Published var isLoading = false
     @Published var isCanceled = false
@@ -154,15 +155,23 @@ class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
             isLoading = false
         }
     }
+    
+    func edit(){
+        editMode = true
+        setupRecording()
+    }
+    
     func cancelRecording() {
         voiceRecorderWrapper.stopRecording()
         isLoading = false
         isCanceled = true
         isDone = true
+        editMode = false
     }
     func onRecognition(transcript: String?, error: Error?) {
         isLoading = false
         isDone = true
+        editMode = false
         
         if let error = error {
             self.transcript = error.localizedDescription
@@ -345,6 +354,15 @@ struct VoiceRecognitionView: View {
     
     private var recordingView: some View {
         VStack {
+            if (viewModel.editMode){
+                Text("Tell me, what to change in that text:")
+                transcriptView
+            }
+            else{
+                Toggle("", isOn: $smartMode)
+                    .labelsHidden()
+                Text("Smart mode")
+            }
             Text("Recording...")
             Button(action: viewModel.voiceRecorderWrapper.stopRecording) {
                 ZStack {
@@ -358,9 +376,6 @@ struct VoiceRecognitionView: View {
                 }
             }
             .padding()
-            Toggle("", isOn: $smartMode)
-                .labelsHidden()
-            Text("Smart mode")
         }
     }
     
@@ -370,7 +385,6 @@ struct VoiceRecognitionView: View {
     
     private var transcriptView: some View{
         VStack{
-            Text("Recognised text:")
             ScrollView {
                 Text(viewModel.transcript)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -393,8 +407,9 @@ struct VoiceRecognitionView: View {
         VStack{
             topBar.padding()
             Spacer()
+            Text("Recognised text:")
             transcriptView.padding()
-            actionsBar
+            actionsBar.padding()
         }
     }
     
@@ -420,7 +435,7 @@ struct VoiceRecognitionView: View {
     
     private var editButton: some View {
         VStack{
-            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "pencil", size: 100)
+            IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 100)
             Text("Edit")
         }
     }
