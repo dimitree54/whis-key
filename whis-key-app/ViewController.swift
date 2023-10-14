@@ -304,8 +304,6 @@ struct IntroView: View {
             .tag(1)
             
         }
-        .tabViewStyle(PageTabViewStyle())  // Page control style for TabView
-        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))  // Display page indicator
     }
 }
 
@@ -387,9 +385,9 @@ struct VoiceRecognitionView: View {
                 transcriptView
             }
             else{
+                Text("Smart mode")
                 Toggle("", isOn: $smartMode)
                     .labelsHidden()
-                Text("Smart mode")
             }
             Text("Recording...")
             Button(action: viewModel.voiceRecorderWrapper.stopRecording) {
@@ -456,21 +454,21 @@ struct VoiceRecognitionView: View {
     
     private var repeatButton: some View {
         VStack{
-            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 50)
+            IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 85)
             Text("Retry")
         }
     }
     
     private var editButton: some View {
         VStack{
-            IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 50)
+            IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 85)
             Text("Edit")
         }
     }
     
     private var copyButton: some View {
         VStack{
-            IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 50)
+            IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 85)
             Text("Copy")
         }
         
