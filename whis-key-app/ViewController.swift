@@ -329,12 +329,35 @@ struct IconButton: View {
     }
 }
 
+struct DeviceRotationViewModifier: ViewModifier {
+    let action: (UIDeviceOrientation) -> Void
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                action(UIDevice.current.orientation)
+            }
+    }
+}
+
+extension View {
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
+    }
+}
+
 struct VoiceRecognitionView: View {
     @Binding var smartMode: Bool
     @Binding var fromKeyboard: Bool
     @StateObject public var viewModel: RecorderViewModel
     @State private var animationScale: CGFloat = 1.0
     @Environment(\.scenePhase) private var scenePhase
+    @State private var orientation = UIDeviceOrientation.unknown
+    
+    var isRunningOnIpad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
     
     init(smartMode: Binding<Bool>, fromKeyboard: Binding<Bool>) {
         self._smartMode = smartMode
@@ -371,6 +394,9 @@ struct VoiceRecognitionView: View {
         }
         .onChange(of: scenePhase){
             handleScenePhaseChange(newPhase: scenePhase)
+        }
+        .onRotate { newOrientation in
+            orientation = newOrientation
         }
     }
     
@@ -439,9 +465,11 @@ struct VoiceRecognitionView: View {
         }
     }
     
+    
     private var topBar: some View {
         HStack{
-            if (fromKeyboard){
+            let isLandscape = (orientation == UIDeviceOrientation.landscapeLeft || orientation == UIDeviceOrientation.landscapeRight)
+            if (fromKeyboard && (isRunningOnIpad || !isLandscape)){
                 VStack{
                     Text("👆 press here to")
                     Text("return to keyboard")
