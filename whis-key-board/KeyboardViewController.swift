@@ -35,7 +35,7 @@ struct MyCustomToolbar: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.blue)
-        .clipShape(Circle())
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding()
     }
     
