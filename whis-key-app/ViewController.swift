@@ -359,6 +359,11 @@ struct VoiceRecognitionView: View {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
     
+    func compactRequired()->Bool{
+        let isLandscape = (orientation == UIDeviceOrientation.landscapeLeft || orientation == UIDeviceOrientation.landscapeRight)
+        return isLandscape && !isRunningOnIpad
+    }
+    
     init(smartMode: Binding<Bool>, fromKeyboard: Binding<Bool>) {
         self._smartMode = smartMode
         self._fromKeyboard = fromKeyboard
@@ -407,7 +412,9 @@ struct VoiceRecognitionView: View {
     private var recordingView: some View {
         VStack {
             if (viewModel.editMode){
-                Text("Tell me, what to change in that text:")
+                if (!compactRequired()){
+                    Text("Tell me, what to change in that text:")
+                }
                 transcriptView
             }
             else{
@@ -459,7 +466,9 @@ struct VoiceRecognitionView: View {
         VStack{
             topBar.padding()
             Spacer()
-            Text("Recognised text:")
+            if (!compactRequired()){
+                Text("Recognised text:")
+            }
             transcriptView.padding()
             actionsBar.padding()
         }
@@ -468,8 +477,7 @@ struct VoiceRecognitionView: View {
     
     private var topBar: some View {
         HStack{
-            let isLandscape = (orientation == UIDeviceOrientation.landscapeLeft || orientation == UIDeviceOrientation.landscapeRight)
-            if (fromKeyboard && (isRunningOnIpad || !isLandscape)){
+            if (fromKeyboard && !compactRequired()){
                 VStack{
                     Text("👆 press here to")
                     Text("return to keyboard")
@@ -483,21 +491,27 @@ struct VoiceRecognitionView: View {
     private var repeatButton: some View {
         VStack{
             IconButton(action: viewModel.setupRecording, bgColor: .blue, systemName: "repeat", size: 85)
-            Text("Retry")
+            if (!compactRequired()){
+                Text("Retry")
+            }
         }
     }
     
     private var editButton: some View {
         VStack{
             IconButton(action: viewModel.edit, bgColor: .blue, systemName: "pencil", size: 85)
-            Text("Edit")
+            if (!compactRequired()){
+                Text("Edit")
+            }
         }
     }
     
     private var copyButton: some View {
         VStack{
             IconButton(action: viewModel.copy2clipboard, bgColor: .gray, systemName: "doc.on.doc", size: 85)
-            Text("Copy")
+            if (!compactRequired()){
+                Text("Copy")
+            }
         }
         
     }
