@@ -64,7 +64,7 @@ struct MyCustomToolbar: View {
     var inputSourceButton: some View {
         VStack{
             Spacer()
-            buttonWithIcon(action: {}, systemName: "globe")
+            buttonWithIcon(action: {controller.advanceToNextInputMode()}, systemName: "globe")
         }
         .padding()
     }
