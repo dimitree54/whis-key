@@ -17,6 +17,7 @@
 		4EA1EE032AE280A7002ED73D /* RecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE022AE280A7002ED73D /* RecorderViewModel.swift */; };
 		4EA1EE052AE28137002ED73D /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE042AE28137002ED73D /* IntroView.swift */; };
 		4EA1EE072AE28D23002ED73D /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE062AE28D23002ED73D /* PurchaseManager.swift */; };
+		4EA1EE092AE2B9EF002ED73D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EA1EE082AE2B9EF002ED73D /* Assets.xcassets */; };
 		AF8FF98B1E35B10300392FA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF98A1E35B10300392FA2 /* ViewController.swift */; };
 		AF8FF9A11E35B13B00392FA2 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF9A01E35B13B00392FA2 /* KeyboardViewController.swift */; };
 		AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AF8FF99E1E35B13B00392FA2 /* whis-key-board.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -52,7 +53,6 @@
 		4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key.entitlements"; sourceTree = "<group>"; };
 		4E757DA12AC2ADB60035A03B /* whis-key-board.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key-board.entitlements"; sourceTree = "<group>"; };
 		4E7638052AC77723003B0ED0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		4E84076E2AD728EE0054C523 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4EA1EDFB2AE27E9D002ED73D /* StoreTestConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreTestConfig.storekit; sourceTree = "<group>"; };
 		4EA1EDFC2AE27F9D002ED73D /* VoiceRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorder.swift; sourceTree = "<group>"; };
 		4EA1EDFE2AE2802C002ED73D /* AudioRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecognitionService.swift; sourceTree = "<group>"; };
@@ -60,6 +60,7 @@
 		4EA1EE022AE280A7002ED73D /* RecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewModel.swift; sourceTree = "<group>"; };
 		4EA1EE042AE28137002ED73D /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		4EA1EE062AE28D23002ED73D /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		4EA1EE082AE2B9EF002ED73D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF8FF9851E35B10300392FA2 /* whis-key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whis-key.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF8FF98A1E35B10300392FA2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AF8FF9941E35B10300392FA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,8 +100,8 @@
 		AF8FF97C1E35B10300392FA2 = {
 			isa = PBXGroup;
 			children = (
+				4EA1EE082AE2B9EF002ED73D /* Assets.xcassets */,
 				4EA1EDFB2AE27E9D002ED73D /* StoreTestConfig.storekit */,
-				4E84076E2AD728EE0054C523 /* Images.xcassets */,
 				4E7638052AC77723003B0ED0 /* README.md */,
 				4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */,
 				AF8FF9871E35B10300392FA2 /* whis-key-app */,
@@ -245,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EA1EE092AE2B9EF002ED73D /* Assets.xcassets in Resources */,
 				4E6EB6E62AD9CB00005E0BA8 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
