@@ -11,6 +11,11 @@
 		4E757D822ABF6C3E0035A03B /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E757D812ABF6C3E0035A03B /* App.swift */; };
 		4E757D852ABF7CBD0035A03B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4E757D842ABF7CBD0035A03B /* Alamofire */; };
 		4E89BEE42ABEF08A008C0119 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E89BEE32ABEF08A008C0119 /* KeyboardKit */; };
+		4EA1EDFD2AE27F9D002ED73D /* VoiceRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EDFC2AE27F9D002ED73D /* VoiceRecorder.swift */; };
+		4EA1EDFF2AE2802C002ED73D /* AudioRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EDFE2AE2802C002ED73D /* AudioRecognitionService.swift */; };
+		4EA1EE012AE28076002ED73D /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE002AE28076002ED73D /* ClipboardManager.swift */; };
+		4EA1EE032AE280A7002ED73D /* RecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE022AE280A7002ED73D /* RecorderViewModel.swift */; };
+		4EA1EE052AE28137002ED73D /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1EE042AE28137002ED73D /* IntroView.swift */; };
 		AF8FF98B1E35B10300392FA2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF98A1E35B10300392FA2 /* ViewController.swift */; };
 		AF8FF9A11E35B13B00392FA2 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8FF9A01E35B13B00392FA2 /* KeyboardViewController.swift */; };
 		AF8FF9A51E35B13B00392FA2 /* whis-key-board.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AF8FF99E1E35B13B00392FA2 /* whis-key-board.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -47,6 +52,12 @@
 		4E757DA12AC2ADB60035A03B /* whis-key-board.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "whis-key-board.entitlements"; sourceTree = "<group>"; };
 		4E7638052AC77723003B0ED0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4E84076E2AD728EE0054C523 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4EA1EDFB2AE27E9D002ED73D /* StoreTestConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreTestConfig.storekit; sourceTree = "<group>"; };
+		4EA1EDFC2AE27F9D002ED73D /* VoiceRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorder.swift; sourceTree = "<group>"; };
+		4EA1EDFE2AE2802C002ED73D /* AudioRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecognitionService.swift; sourceTree = "<group>"; };
+		4EA1EE002AE28076002ED73D /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
+		4EA1EE022AE280A7002ED73D /* RecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewModel.swift; sourceTree = "<group>"; };
+		4EA1EE042AE28137002ED73D /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		AF8FF9851E35B10300392FA2 /* whis-key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whis-key.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF8FF98A1E35B10300392FA2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AF8FF9941E35B10300392FA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +97,7 @@
 		AF8FF97C1E35B10300392FA2 = {
 			isa = PBXGroup;
 			children = (
+				4EA1EDFB2AE27E9D002ED73D /* StoreTestConfig.storekit */,
 				4E84076E2AD728EE0054C523 /* Images.xcassets */,
 				4E7638052AC77723003B0ED0 /* README.md */,
 				4E757DA02AC2ADAE0035A03B /* whis-key.entitlements */,
@@ -111,6 +123,11 @@
 				AF8FF9941E35B10300392FA2 /* Info.plist */,
 				4E757D812ABF6C3E0035A03B /* App.swift */,
 				4E6EB6E52AD9CB00005E0BA8 /* Settings.bundle */,
+				4EA1EDFC2AE27F9D002ED73D /* VoiceRecorder.swift */,
+				4EA1EDFE2AE2802C002ED73D /* AudioRecognitionService.swift */,
+				4EA1EE002AE28076002ED73D /* ClipboardManager.swift */,
+				4EA1EE022AE280A7002ED73D /* RecorderViewModel.swift */,
+				4EA1EE042AE28137002ED73D /* IntroView.swift */,
 			);
 			path = "whis-key-app";
 			sourceTree = "<group>";
@@ -243,8 +260,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EA1EE052AE28137002ED73D /* IntroView.swift in Sources */,
+				4EA1EE032AE280A7002ED73D /* RecorderViewModel.swift in Sources */,
+				4EA1EE012AE28076002ED73D /* ClipboardManager.swift in Sources */,
+				4EA1EDFF2AE2802C002ED73D /* AudioRecognitionService.swift in Sources */,
 				4E757D822ABF6C3E0035A03B /* App.swift in Sources */,
 				AF8FF98B1E35B10300392FA2 /* ViewController.swift in Sources */,
+				4EA1EDFD2AE27F9D002ED73D /* VoiceRecorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
