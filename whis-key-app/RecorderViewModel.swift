@@ -2,12 +2,17 @@ import Foundation
 import SwiftUI
 
 
+class IntroState: ObservableObject {
+    @Published var acceptedAgreement = UserDefaults.standard.bool(forKey: "acceptedAgreement")
+    @Published var enabledKeyboard = UserDefaults.standard.bool(forKey: "enabledKeyboard")
+}
+
+
 class RecorderViewModel: ObservableObject, VoiceRecorderDelegate {
     @Binding var smartMode: Bool
     @Binding var fromKeyboard: Bool
     
     @Published var editMode = false
-    @Published var hasSeenInstructions = UserDefaults.standard.bool(forKey: "HasSeenInstructions")
     @Published var isLoading = false
     @Published var isCanceled = false
     @Published var isDone = false

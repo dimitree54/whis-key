@@ -44,7 +44,9 @@ extension View {
 struct VoiceRecognitionView: View {
     @Binding var smartMode: Bool
     @Binding var fromKeyboard: Bool
-    @StateObject public var viewModel: RecorderViewModel
+    @StateObject private var introState = IntroState()
+    @StateObject private var viewModel: RecorderViewModel
+    @StateObject private var purchaseManager = PurchaseManager()
     @State private var animationScale: CGFloat = 1.0
     @Environment(\.scenePhase) private var scenePhase
     @State private var orientation = UIDeviceOrientation.unknown
@@ -65,11 +67,28 @@ struct VoiceRecognitionView: View {
     }
     
     var body: some View {
-        if (viewModel.hasSeenInstructions) {
-            mainView
+        if (!introState.acceptedAgreement){
+            AgreementView(onDone: {
+                introState.acceptedAgreement = true
+                UserDefaults.standard.set(true, forKey: "acceptedAgreement")
+            })
+        }
+        else if (!introState.enabledKeyboard){
+            InstructionsView(onDone: {
+                introState.enabledKeyboard = true
+                UserDefaults.standard.set(true, forKey: "enabledKeyboard")
+            })
+        }
+        else if (!purchaseManager.hasUnlockedPro){
+            PaywallView()
+                .environmentObject(purchaseManager)
+                .task {
+                    await purchaseManager.updatePurchasedProducts()
+                }
         }
         else {
-            IntroView(onDone: setupInstructionsAndRecording)
+            mainView
+                .onAppear(perform:{viewModel.setupRecording()})
         }
     }
     
@@ -219,9 +238,7 @@ struct VoiceRecognitionView: View {
     private func handleScenePhaseChange(newPhase: ScenePhase) {
         switch newPhase {
         case .active:
-            if (viewModel.hasSeenInstructions) {
-                viewModel.setupRecording()
-            }
+            break
         case .inactive:
             viewModel.cancelRecording()
         case .background:
@@ -229,11 +246,5 @@ struct VoiceRecognitionView: View {
         @unknown default:
             break
         }
-    }
-    
-    private func setupInstructionsAndRecording() {
-        viewModel.hasSeenInstructions = true
-        UserDefaults.standard.set(true, forKey: "HasSeenInstructions")
-        viewModel.setupRecording()
     }
 }
