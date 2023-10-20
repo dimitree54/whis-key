@@ -1,0 +1,7 @@
+1. App records your voice
+2. App sends it to our server
+3. Our server redirects your voice to OpenAI Whisper API
+4. Our server send the recognised text back to you
+5. Right after the recognition we remove your voice from our server. 
+Though we have access to your voice recording on our server during the recognition, we promise not to listen to it.
+Also you can check OpenAI API privacy policy: https://openai.com/policies/privacy-policy
