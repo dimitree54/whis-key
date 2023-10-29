@@ -80,7 +80,11 @@ struct VoiceRecognitionView: View {
             })
         }
         else if (!purchaseManager.hasUnlockedPro){
-            PaywallView()
+            PaywallView(onDone: { product, result in
+                Task {
+                    await purchaseManager.updatePurchasedProducts()
+                }
+            })
                 .environmentObject(purchaseManager)
                 .task {
                     await purchaseManager.updatePurchasedProducts()

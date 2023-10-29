@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import StoreKit
 
 struct AgreementView: View {
     var onDone: () -> Void  // Declare a callback function
@@ -68,35 +69,28 @@ struct InstructionsView: View {
     }
 }
 
+struct SubscriptionView: View {
+    @State private var isSubscriptionSheetPresented = false
+
+    var body: some View {
+        Button("Manage Subscriptions") {
+            isSubscriptionSheetPresented = true
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+        .manageSubscriptionsSheet(isPresented: $isSubscriptionSheetPresented, subscriptionGroupID: "21399669")
+    }
+}
+
 struct PaywallView: View {
+    var onDone: (Product, Result<Product.PurchaseResult, any Error>) async -> ()
     @EnvironmentObject private var purchaseManager: PurchaseManager
     var body: some View {
         VStack(spacing: 20) {
-            Text("You need subscription to use WhisKeyBoard:")
-            ForEach(purchaseManager.products) { product in
-                Button {
-                    Task {
-                        do {
-                            try await purchaseManager.purchase(product)
-                        } catch {
-                            print(error)
-                        }
-                    }
-                } label: {
-                    Text("\(product.displayPrice) - \(product.displayName)")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-            }
-        }.task {
-            do {
-                try await purchaseManager.loadProducts()
-            } catch {
-                print(error)
-            }
+            SubscriptionStoreView(groupID: "21399669")
+                .onInAppPurchaseCompletion(perform: onDone)
         }
-        .padding()
     }
 }
