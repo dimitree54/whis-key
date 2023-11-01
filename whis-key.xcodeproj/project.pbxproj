@@ -418,7 +418,7 @@
 				CODE_SIGN_ENTITLEMENTS = "whis-key.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 98W9LZK8CR;
 				INFOPLIST_FILE = "whis-key-app/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WhisKey;
@@ -449,7 +449,7 @@
 				CODE_SIGN_ENTITLEMENTS = "whis-key.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 98W9LZK8CR;
 				INFOPLIST_FILE = "whis-key-app/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WhisKey;
@@ -477,7 +477,7 @@
 				CODE_SIGN_ENTITLEMENTS = "whis-key-board/whis-key-board.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 98W9LZK8CR;
 				INFOPLIST_FILE = "whis-key-board/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -501,7 +501,7 @@
 				CODE_SIGN_ENTITLEMENTS = "whis-key-board/whis-key-board.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 98W9LZK8CR;
 				INFOPLIST_FILE = "whis-key-board/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
