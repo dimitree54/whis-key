@@ -85,12 +85,15 @@ struct SubscriptionView: View {
 }
 
 struct PaywallView: View {
-    var onDone: (Product, Result<Product.PurchaseResult, any Error>) async -> ()
-    @EnvironmentObject private var purchaseManager: PurchaseManager
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        VStack(spacing: 20) {
-            SubscriptionStoreView(groupID: "21399669")
-                .onInAppPurchaseCompletion(perform: onDone)
-        }
+        SubscriptionStoreView(groupID: "21399669")
+            .onInAppPurchaseStart { product in
+                print(product.displayName)
+            }
+            .onInAppPurchaseCompletion { product, result in
+                dismiss()
+            }
     }
 }

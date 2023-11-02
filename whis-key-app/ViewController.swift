@@ -65,6 +65,7 @@ struct VoiceRecognitionView: View {
         self._fromKeyboard = fromKeyboard
         self._viewModel = StateObject(wrappedValue: RecorderViewModel(smartMode: smartMode, fromKeyboard: fromKeyboard))
     }
+    @State private var paywallShown = true
     
     var body: some View {
         if (!introState.acceptedAgreement){
@@ -79,15 +80,19 @@ struct VoiceRecognitionView: View {
                 UserDefaults.standard.set(true, forKey: "enabledKeyboard")
             })
         }
-        else if (!purchaseManager.hasUnlockedPro){
-            PaywallView(onDone: { product, result in
-                Task {
-                    await purchaseManager.updatePurchasedProducts()
+        else if (paywallShown){
+            Text("Something wrong with the subscription. Report to developers.")
+                .sheet(isPresented: $paywallShown) {
+                    PaywallView()
                 }
-            })
-                .environmentObject(purchaseManager)
-                .task {
-                    await purchaseManager.updatePurchasedProducts()
+                .subscriptionStatusTask(for: "21399669") { taskState in
+                    if let value = taskState.value {
+                        paywallShown = value
+                            .filter { $0.state != .revoked && $0.state != .expired }
+                            .isEmpty
+                    } else {
+                        paywallShown = true
+                    }
                 }
         }
         else {

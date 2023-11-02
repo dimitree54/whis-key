@@ -3,4 +3,132 @@
    uuid = "C550E2D2-A80C-46EA-93E6-48DFCB5C4CC9"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "350BE666-4CBF-4FF1-BA2A-DF7E7E2CF8C5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "whis-key-app/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "350BE666-4CBF-4FF1-BA2A-DF7E7E2CF8C5 - 6d7802a4dfce37c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "2572">
+               </Location>
+               <Location
+                  uuid = "350BE666-4CBF-4FF1-BA2A-DF7E7E2CF8C5 - 697b4acbe6e6bad0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #5 (_StoreKit_SwiftUI.EntitlementTaskState&lt;Swift.Array&lt;StoreKit.Product.SubscriptionInfo.Status&gt;&gt;) async -&gt; () in whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "244">
+               </Location>
+               <Location
+                  uuid = "350BE666-4CBF-4FF1-BA2A-DF7E7E2CF8C5 - 57f3132059bf672b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #5 (_StoreKit_SwiftUI.EntitlementTaskState&lt;Swift.Array&lt;StoreKit.Product.SubscriptionInfo.Status&gt;&gt;) async -&gt; () in whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "350BE666-4CBF-4FF1-BA2A-DF7E7E2CF8C5 - 57f3132059bf672b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #4 (_StoreKit_SwiftUI.EntitlementTaskState&lt;Swift.Array&lt;StoreKit.Product.SubscriptionInfo.Status&gt;&gt;) async -&gt; () in whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "128">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5C0462E7-3743-445B-A2DB-DCE2D089003F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "whis-key-app/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "5C0462E7-3743-445B-A2DB-DCE2D089003F - 57f3132059bf664e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #5 (_StoreKit_SwiftUI.EntitlementTaskState&lt;Swift.Array&lt;StoreKit.Product.SubscriptionInfo.Status&gt;&gt;) async -&gt; () in whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "764">
+               </Location>
+               <Location
+                  uuid = "5C0462E7-3743-445B-A2DB-DCE2D089003F - 57f3132059bf664e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #4 (_StoreKit_SwiftUI.EntitlementTaskState&lt;Swift.Array&lt;StoreKit.Product.SubscriptionInfo.Status&gt;&gt;) async -&gt; () in whis_key.VoiceRecognitionView.body.getter : some"
+                  moduleName = "whis-key"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryr/source/whis-key/whis-key-app/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "412">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
