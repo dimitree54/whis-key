@@ -46,7 +46,6 @@ struct VoiceRecognitionView: View {
     @Binding var fromKeyboard: Bool
     @StateObject private var introState = IntroState()
     @StateObject private var viewModel: RecorderViewModel
-    @StateObject private var purchaseManager = PurchaseManager()
     @State private var animationScale: CGFloat = 1.0
     @Environment(\.scenePhase) private var scenePhase
     @State private var orientation = UIDeviceOrientation.unknown
